@@ -8,6 +8,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { connectdb } from "./db/connect.js";
+import upload from "./storage/files.js";
+import { register } from "./contollers/auth.js";
 
 /* CONFIGURATIONS */
 
@@ -26,6 +28,8 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
+
+app.post("/auth/register", upload.single("picture"), register);
 
 const port = process.env.PORT || 6001;
 
