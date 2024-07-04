@@ -12,6 +12,8 @@ import { connectdb } from "./db/connect.js";
 import upload from "./storage/files.js";
 import { register } from "./contollers/auth.js";
 import authRouter from "./routes/auth.js";
+import tokenverify from "./middleware/auth.js";
+import userRouter from "./routes/user.js";
 
 /* Error handling middleware */
 import errorHandlerMiddleware from "./middleware/error-handler.js";
@@ -39,6 +41,7 @@ app.post("/auth/register", upload.single("picture"), register);
 
 /* Routes */
 app.use("/auth", authRouter);
+app.use("/user", tokenverify, userRouter);
 
 /* Error handler middleware */
 app.use(notFoundMiddleware);
