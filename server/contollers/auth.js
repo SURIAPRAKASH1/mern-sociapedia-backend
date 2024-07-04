@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
-// import { BadRequestError, Unauthenticated } from "../errors";
+import { BadRequestError, UnauthenticatedError } from "../errors/index.js";
 
 export const register = async (req, res) => {
   try {
@@ -35,6 +35,24 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
-  res.send("This is login");
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw new BadRequestError("Please provide email and password");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new UnauthenticatedError("Invaild Credentials");
+  }
+
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    throw new UnauthenticatedError("Invaild Credentials");
+  }
+
+  const token = user.createJWT();
+  user.password = undefined;
+
+  res.status(StatusCodes.OK).json({ token, user });
 };

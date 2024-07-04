@@ -6,10 +6,16 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import "express-async-errors";
 
 import { connectdb } from "./db/connect.js";
 import upload from "./storage/files.js";
 import { register } from "./contollers/auth.js";
+import authRouter from "./routes/auth.js";
+
+/* Error handling middleware */
+import errorHandlerMiddleware from "./middleware/error-handler.js";
+import notFoundMiddleware from "./middleware/not-found.js";
 
 /* CONFIGURATIONS */
 
@@ -30,6 +36,13 @@ app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 app.post("/auth/register", upload.single("picture"), register);
+
+/* Routes */
+app.use("/auth", authRouter);
+
+/* Error handler middleware */
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 6001;
 

@@ -59,7 +59,7 @@ UserSchema.methods.createJWT = function () {
     },
     process.env.JWT_SECRET,
     {
-      expriresIm: process.env.JWT_LIFETIME,
+      expiresIn: process.env.JWT_LIFETIME,
     }
   );
 };
