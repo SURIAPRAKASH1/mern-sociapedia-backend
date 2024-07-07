@@ -14,6 +14,8 @@ import { register } from "./contollers/auth.js";
 import authRouter from "./routes/auth.js";
 import tokenverify from "./middleware/auth.js";
 import userRouter from "./routes/user.js";
+import { createPost } from "./contollers/posts.js";
+import postRoutes from "./routes/posts.js";
 
 /* Error handling middleware */
 import errorHandlerMiddleware from "./middleware/error-handler.js";
@@ -37,11 +39,14 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
+/** Routes with file */
 app.post("/auth/register", upload.single("picture"), register);
+app.post("/posts", tokenverify, upload.single("picture"), createPost);
 
 /* Routes */
 app.use("/auth", authRouter);
 app.use("/user", tokenverify, userRouter);
+app.use("/posts", tokenverify, postRoutes);
 
 /* Error handler middleware */
 app.use(notFoundMiddleware);
