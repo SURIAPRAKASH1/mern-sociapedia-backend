@@ -1,5 +1,6 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-import { Formik } from "formik";
+import Form from "./Form"
+
 
 const LoginPage = () => {
   const theme = useTheme();
@@ -28,6 +29,7 @@ const LoginPage = () => {
         <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
           Welcome to Socipedia, the Social Media for Sociapaths !
         </Typography>
+        <Form />
       </Box>
     </Box>
   );
