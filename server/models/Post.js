@@ -16,7 +16,7 @@ const postSchema = mongoose.Schema(
       required: [true, "Please provide lastName"],
     },
     location: String,
-    discription: String,
+    description: String,
     picturePath: String,
     userPicturePath: String,
     likes: {

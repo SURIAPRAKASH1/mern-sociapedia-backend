@@ -15,7 +15,10 @@ export const authSlice = createSlice({
       state.mode = state.mode === "light" ? "dark" : "light";
     },
     setLogin: (state, action) => {
-      state.user = action.payload.user;
+      state.user = {
+        ...action.payload.user,
+        friends: action.payload.user.friends || [],
+      };
       state.token = action.payload.token;
     },
     setLogout: (state) => {
@@ -24,15 +27,15 @@ export const authSlice = createSlice({
     },
     setFriends: (state, action) => {
       if (state.user) {
-        state.user.friends = action.payload.friends;
+        state.user.friends = action.payload.friends || [];
       } else {
         console.error("user friends not exit ");
       }
     },
-    setPost: (state, action) => {
+    setPosts: (state, action) => {
       state.posts = action.payload.posts;
     },
-    setPosts: (state, action) => {
+    setPost: (state, action) => {
       const updatedPosts = state.posts.map((post) => {
         if (post._id === action.payload.post._id) return action.payload.post;
         return post;
