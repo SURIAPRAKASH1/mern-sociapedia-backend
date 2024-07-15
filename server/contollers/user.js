@@ -32,9 +32,9 @@ export const getUserFriends = async (req, res) => {
     user.friends.map((id) => User.findById(id))
   );
 
-  if (friends.length < 1) {
-    throw new NotFoundError(`No friends founded related to this id: ${id}`);
-  }
+  // if (friends.length < 1) {
+  //   throw new NotFoundError(`No friends founded related to this id: ${id}`);
+  // }
 
   const formattedFriends = friends.map(
     ({ _id, firstname, lastname, occupation, location, picturePath }) => {
@@ -61,30 +61,49 @@ export const addRemoveFriend = async (req, res) => {
     throw new NotFoundError("User or Friend not found");
   }
 
-  const isFriend = user.friends.includes(friendId);
+  // const isFriend = user.friends.includes(friendId);
 
-  const userUpdate = isFriend
-    ? { $pull: { friends: friendId } }
-    : { $addToSet: { friends: friendId } };
+  // const userUpdate = isFriend
+  //   ? { $pull: { friends: friendId } }
+  //   : { $addToSet: { friends: friendId } };
 
-  const friendUpdate = isFriend
-    ? { $pull: { friends: id } }
-    : { $addToSet: { friends: id } };
+  // const friendUpdate = isFriend
+  //   ? { $pull: { friends: id } }
+  //   : { $addToSet: { friends: id } };
 
-  await User.findByIdAndUpdate(id, userUpdate, {
-    new: true,
-    runValidators: true,
-  });
+  // await User.findByIdAndUpdate(id, userUpdate, {
+  //   new: true,
+  //   runValidators: true,
+  // });
 
-  await User.findByIdAndUpdate(friendId, friendUpdate, {
-    new: true,
-    runValidators: true,
-  });
+  // await User.findByIdAndUpdate(friendId, friendUpdate, {
+  //   new: true,
+  //   runValidators: true,
+  // });
 
-  const updatedUser = await User.findById(id).populate(
-    "friends",
-    "_id firstname lastname occupation location picturePath"
+  // const updatedUser = await User.findById(id).populate(
+  //   "friends",
+  //   "_id firstname lastname occupation location picturePath"
+  // );
+
+  if (user.friends.includes(friendId)) {
+    user.friends = user.friends.filter((id) => id !== friendId);
+    friend.friends = friend.friends.filter((id) => id !== id);
+  } else {
+    user.friends.push(friendId);
+    friend.friends.push(id);
+  }
+  await user.save();
+  await friend.save();
+
+  const friends = await Promise.all(
+    user.friends.map((id) => User.findById(id))
+  );
+  const formattedFriends = friends.map(
+    ({ _id, firstname, lastname, occupation, location, picturePath }) => {
+      return { _id, firstname, lastname, occupation, location, picturePath };
+    }
   );
 
-  res.status(StatusCodes.OK).json(updatedUser);
+  res.status(StatusCodes.OK).json(formattedFriends);
 };

@@ -75,10 +75,7 @@ const UserWidget = ({ userId, picturePath }) => {
             >
               {firstname} {lastname}
             </Typography>
-            <Typography color={medium}>
-              {friends.length}
-              friends
-            </Typography>
+            <Typography color={medium}>{friends.length} friends</Typography>
           </Box>
         </FlexBetween>
         <ManageAccountsOutlined />

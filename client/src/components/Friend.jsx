@@ -25,10 +25,19 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   // console.log("friendId ", friends);
   // console.log("id from friend", friendId);
 
-  // const isFriend = friends.find((friend) => friend._id === friendId);
+  const isFriend = friends.find((friend) => friend._id === friendId);
 
   const [feedbackMessage, setFeedbackMessage] = useState("");
-  const isFriend = friends.friends.includes(friendId);
+
+  // let isFriend;
+
+  // if (friends.friends) {
+  //   // console.log("We have frineds");
+  //   isFriend = friends.friends.includes(friendId);
+  // } else {
+  //   isFriend = friends.find((friend) => friend === friendId);
+  //   // console.log("We don't have friends");
+  // }
 
   // console.log("isFriend", isFriend);
 
@@ -54,8 +63,8 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
     // console.log(data);
     dispatch(setFriends({ friends: data }));
 
-    if (!isFriend) {
-      setFeedbackMessage("Fried Removed Successfully ");
+    if (isFriend) {
+      setFeedbackMessage("Friend Removed Successfully ");
     } else {
       setFeedbackMessage("Friend Added Successfully");
     }
@@ -102,10 +111,10 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
           <Typography
             color={main}
             variant="h6"
-            fontWeight="300"
+            fontWeight="100"
             sx={{
-              mt: "0.1rem",
-              ml: "4.1rem",
+              mt: "0.5rem",
+              ml: "0.1rem",
             }}
           >
             {feedbackMessage}
